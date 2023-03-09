@@ -1,8 +1,8 @@
 import UIKit
 
-class ImagesListViewController: UIViewController {
-    let photosName: [String] = Array(0..<20).map{ "\($0)" }
-    @IBOutlet weak var tableView: UITableView!
+final class ImagesListViewController: UIViewController {
+    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
+    @IBOutlet private weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +50,7 @@ extension ImagesListViewController {
         let likeImage = isLiked ? UIImage(named: "Like_button") : UIImage(named: "Dislike_button")
         
         cell.likeButton.setImage(likeImage, for: .normal)
+        cell.selectionStyle = .none
     }
 }
 
