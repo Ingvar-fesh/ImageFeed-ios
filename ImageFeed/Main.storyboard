@@ -89,16 +89,15 @@
                             <constraint firstAttribute="top" secondItem="0ZD-Gs-GgP" secondAttribute="top" id="l0f-Ng-QVT"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="stack_activate_icon" id="ZPP-zJ-nY8">
-                        <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBarItem>
+                    <navigationItem key="navigationItem" id="POo-S3-1Do"/>
                     <connections>
                         <outlet property="tableView" destination="0ZD-Gs-GgP" id="715-wa-tTl"/>
+                        <segue destination="5oS-Ea-21R" kind="show" identifier="ShowSingleImage" id="jJg-Og-hjl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="41" y="287"/>
+            <point key="canvasLocation" x="950.72463768115949" y="286.60714285714283"/>
         </scene>
         <!--Profile Controller-->
         <scene sceneID="cKW-98-V4s">
@@ -185,13 +184,72 @@
                         </tabBarAppearance>
                     </tabBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="Ts6-5e-CZp"/>
+                        <segue destination="C0o-0N-NsU" kind="relationship" relationship="viewControllers" id="Ts6-5e-CZp"/>
                         <segue destination="vfg-DX-hcJ" kind="relationship" relationship="viewControllers" id="8oA-FH-zK6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zij-ya-jCc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1345" y="-151"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Rhc-sn-ABM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="C0o-0N-NsU" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="" image="stack_activate_icon" id="ZPP-zJ-nY8">
+                        <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ydc-v1-Bah">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                        <navigationBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        </navigationBarAppearance>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="7hl-uG-HOr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F4g-DE-y3X" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="40.579710144927539" y="286.60714285714283"/>
+        </scene>
+        <!--Single Image Controller-->
+        <scene sceneID="E28-Nw-RcY">
+            <objects>
+                <viewController id="5oS-Ea-21R" userLabel="Single Image Controller" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Qn-1f-8Uq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="UXa-HA-AdF">
+                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kXm-Qj-qy2"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="kXm-Qj-qy2" firstAttribute="trailing" secondItem="UXa-HA-AdF" secondAttribute="trailing" id="3ea-kJ-h3B"/>
+                            <constraint firstItem="kXm-Qj-qy2" firstAttribute="bottom" secondItem="UXa-HA-AdF" secondAttribute="bottom" id="ELU-0e-EeH"/>
+                            <constraint firstItem="UXa-HA-AdF" firstAttribute="top" secondItem="kXm-Qj-qy2" secondAttribute="top" id="GOT-KC-qlV"/>
+                            <constraint firstItem="UXa-HA-AdF" firstAttribute="leading" secondItem="kXm-Qj-qy2" secondAttribute="leading" id="eIj-6G-yew"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="xsu-Hx-73u"/>
+                    <connections>
+                        <outlet property="imageView" destination="UXa-HA-AdF" id="epH-8t-uHM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eQ9-A2-l6u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1850.7246376811595" y="286.60714285714283"/>
         </scene>
     </scenes>
     <resources>
