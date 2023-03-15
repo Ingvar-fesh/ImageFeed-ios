@@ -92,7 +92,7 @@
                     <navigationItem key="navigationItem" id="POo-S3-1Do"/>
                     <connections>
                         <outlet property="tableView" destination="0ZD-Gs-GgP" id="715-wa-tTl"/>
-                        <segue destination="5oS-Ea-21R" kind="show" identifier="ShowSingleImage" id="jJg-Og-hjl"/>
+                        <segue destination="5oS-Ea-21R" kind="presentation" identifier="ShowSingleImage" id="qX7-T2-A2A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -224,22 +224,39 @@
         <!--Single Image Controller-->
         <scene sceneID="E28-Nw-RcY">
             <objects>
-                <viewController id="5oS-Ea-21R" userLabel="Single Image Controller" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="5oS-Ea-21R" userLabel="Single Image Controller" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Qn-1f-8Uq">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="UXa-HA-AdF">
-                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="moe-B5-7Ag">
+                                <rect key="frame" x="8" y="56" width="48" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="r7H-xV-o0H"/>
+                                    <constraint firstAttribute="width" constant="48" id="vkT-Cq-9XU"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Go out button">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapBackButton" destination="5oS-Ea-21R" eventType="touchUpInside" id="6jj-R7-5rK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kXm-Qj-qy2"/>
                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="kXm-Qj-qy2" firstAttribute="trailing" secondItem="UXa-HA-AdF" secondAttribute="trailing" id="3ea-kJ-h3B"/>
-                            <constraint firstItem="kXm-Qj-qy2" firstAttribute="bottom" secondItem="UXa-HA-AdF" secondAttribute="bottom" id="ELU-0e-EeH"/>
-                            <constraint firstItem="UXa-HA-AdF" firstAttribute="top" secondItem="kXm-Qj-qy2" secondAttribute="top" id="GOT-KC-qlV"/>
-                            <constraint firstItem="UXa-HA-AdF" firstAttribute="leading" secondItem="kXm-Qj-qy2" secondAttribute="leading" id="eIj-6G-yew"/>
+                            <constraint firstAttribute="trailing" secondItem="UXa-HA-AdF" secondAttribute="trailing" id="3ea-kJ-h3B"/>
+                            <constraint firstAttribute="bottom" secondItem="UXa-HA-AdF" secondAttribute="bottom" id="ELU-0e-EeH"/>
+                            <constraint firstItem="UXa-HA-AdF" firstAttribute="top" secondItem="6Qn-1f-8Uq" secondAttribute="top" id="GOT-KC-qlV"/>
+                            <constraint firstItem="moe-B5-7Ag" firstAttribute="top" secondItem="kXm-Qj-qy2" secondAttribute="top" constant="8" id="ZgX-ox-oF9"/>
+                            <constraint firstItem="UXa-HA-AdF" firstAttribute="leading" secondItem="6Qn-1f-8Uq" secondAttribute="leading" id="eIj-6G-yew"/>
+                            <constraint firstItem="moe-B5-7Ag" firstAttribute="leading" secondItem="kXm-Qj-qy2" secondAttribute="leading" constant="8" id="wd9-m9-WhV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="xsu-Hx-73u"/>
@@ -255,6 +272,7 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="Dislike_button" width="30" height="26"/>
+        <image name="Go out button" width="9" height="16"/>
         <image name="Image" width="20" height="22"/>
         <image name="Image 1" width="70" height="70"/>
         <image name="profile_activate_icon" width="24" height="24"/>
