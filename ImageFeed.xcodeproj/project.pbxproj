@@ -62,17 +62,25 @@
 		F02F350429B5F4430069B960 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				F0CC033829BB278B002CB3AE /* Profile */,
 				F069A25129B86D030007E997 /* ImagesList */,
+				F0CC033829BB278B002CB3AE /* Profile */,
+				F03011AC29C2C0680052360E /* SinglePage */,
 				F02F350529B5F4430069B960 /* AppDelegate.swift */,
 				F02F350729B5F4430069B960 /* SceneDelegate.swift */,
 				F02F350E29B5F4460069B960 /* Assets.xcassets */,
 				F02F351029B5F4460069B960 /* LaunchScreen.storyboard */,
 				F02F351329B5F4460069B960 /* Info.plist */,
 				F069A24F29B86CEF0007E997 /* Main.storyboard */,
-				F0921CF229BB85DA0037ACC3 /* SingleImageViewController.swift */,
 			);
 			path = ImageFeed;
+			sourceTree = "<group>";
+		};
+		F03011AC29C2C0680052360E /* SinglePage */ = {
+			isa = PBXGroup;
+			children = (
+				F0921CF229BB85DA0037ACC3 /* SingleImageViewController.swift */,
+			);
+			path = SinglePage;
 			sourceTree = "<group>";
 		};
 		F069A25129B86D030007E997 /* ImagesList */ = {
