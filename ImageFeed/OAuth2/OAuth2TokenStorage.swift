@@ -10,7 +10,10 @@ final class OAuth2TokenStorage {
         }
         
         set {
-            guard let data = newValue else { return }
+            guard let data = newValue else {
+                storage.removeObject(forKey: keyStorage)
+                return
+            }
             storage.set(data, forKey: keyStorage)
         }
     }

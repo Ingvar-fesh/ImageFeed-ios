@@ -22,7 +22,10 @@ extension SplashViewController {
             guard
                 let navigationController = segue.destination as? UINavigationController,
                 let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for ShowAuthenticationScreen") }
+            else {
+                assertionFailure("Failed to prepare for ShowAuthenticationScreen")
+                return
+            }
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
@@ -31,7 +34,10 @@ extension SplashViewController {
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first
-        else { fatalError("Invalid Configuration ") }
+        else {
+            assertionFailure("Invalid Configuration")
+            return
+        }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
         .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
@@ -42,12 +48,13 @@ extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
-            self.oauth2Service.fetchAuthToken(code: code) { result in
+            self.oauth2Service.fetchAuthToken(code: code) { [weak self] result in
                 switch result {
                 case.success(let response):
-                    self.oauth2TokenStorage.token = response.accessToken
-                    self.switchToTabBarController()
-                case.failure: break }
+                    self?.oauth2TokenStorage.token = response.accessToken
+                    self?.switchToTabBarController()
+                case.failure: assertionFailure()
+                }
             }
         }
     }

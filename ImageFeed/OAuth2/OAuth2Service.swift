@@ -1,9 +1,5 @@
 import Foundation
 
-
-typealias OAuthTokenResponseResult = Result<OAuthTokenResponseBody, Error>
-typealias OAuthTokenResponseHandler = (OAuthTokenResponseResult) -> Void
-
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
@@ -23,9 +19,9 @@ final class OAuth2Service {
         urlComponents.host = "unsplash.com"
         urlComponents.path = "/oauth/token"
         urlComponents.queryItems = [
-            .init(name: "client_id", value: AccessKey),
-            .init(name: "client_secret", value: SecretKey),
-            .init(name: "redirect_uri", value: RedirectURI),
+            .init(name: "client_id", value: SplashParam.accessKey),
+            .init(name: "client_secret", value: SplashParam.secretKey),
+            .init(name: "redirect_uri", value: SplashParam.redirectURI),
             .init(name: "code", value: code),
             .init(name: "grant_type", value: "authorization_code")
         ]
@@ -41,7 +37,11 @@ final class OAuth2Service {
             guard
                 let data = data,
                 let response = response as? HTTPURLResponse,
-                response.statusCode > 200 || response.statusCode <= 300 else { return }
+                response.statusCode > 200 || response.statusCode <= 300 else {
+                completion(.failure(error!))
+                return
+                
+            }
             do {
                 let responseBody = try decoder.decode(OAuthTokenResponseBody.self, from: data)
                 completionInMainThread(.success(responseBody))
