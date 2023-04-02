@@ -1,5 +1,10 @@
 import Foundation
 
+enum CustomError: Error {
+    case responseError
+    case decodeError(error: String)
+}
+
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
@@ -38,7 +43,7 @@ final class OAuth2Service {
                 let data = data,
                 let response = response as? HTTPURLResponse,
                 response.statusCode > 200 || response.statusCode <= 300 else {
-                completion(.failure(error!))
+                completion(.failure(CustomError.responseError))
                 return
                 
             }
