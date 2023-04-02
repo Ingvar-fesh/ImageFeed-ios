@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service()
@@ -46,6 +47,7 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        ProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.oauth2Service.fetchAuthToken(code: code) { [weak self] result in
@@ -53,7 +55,9 @@ extension SplashViewController: AuthViewControllerDelegate {
                 case.success(let response):
                     self?.oauth2TokenStorage.token = response.accessToken
                     self?.switchToTabBarController()
+                    ProgressHUD.dismiss()
                 case.failure: assertionFailure()
+                    ProgressHUD.dismiss()
                 }
             }
         }
