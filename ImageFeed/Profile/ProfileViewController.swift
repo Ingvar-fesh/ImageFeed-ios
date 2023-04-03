@@ -6,8 +6,9 @@ final class ProfileViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
     override func viewDidLoad() {
-       super.viewDidLoad()
-       setConstraints()
+        super.viewDidLoad()
+        setConstraints()
+        fetchProfile()
     }
     
     private let avatar: UIImageView = {
@@ -19,7 +20,6 @@ final class ProfileViewController: UIViewController {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Екатерина Новикова"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = label.font.withSize(23)
@@ -38,7 +38,6 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Hello, world!"
         label.textColor = .white
         label.font = label.font.withSize(13)
         return label
@@ -47,7 +46,6 @@ final class ProfileViewController: UIViewController {
     private let loginLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "@ekaterina_nov"
         label.textColor = .gray
         label.font = label.font.withSize(13)
         return label
@@ -81,6 +79,22 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.leadingAnchor.constraint(equalTo: avatar.leadingAnchor).isActive = true
         
     }
+    
+    private func fetchProfile() {
+         guard let token = OAuth2TokenStorage().token else { return }
+
+         ProfileService().fetchProfile(token) { [weak self] result in
+             guard let self = self else { return }
+             switch result {
+             case .success(let profile):
+                 self.nameLabel.text = profile.name
+                 self.loginLabel.text = profile.loginName
+                 self.descriptionLabel.text = profile.bio
+             case .failure(let error):
+                 print(error)
+             }
+         }
+     }
     
     @objc
     func logoutButtonTap() {
