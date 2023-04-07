@@ -1,6 +1,6 @@
 import Foundation
 
-struct ProfileResult: Codable {
+struct ProfileResult: Decodable {
     let userName: String?
     let firstName: String?
     let lastName: String?
@@ -22,35 +22,40 @@ public struct Profile {
 }
 
 final class ProfileService {
+    
+    static let shared = ProfileService()
+    private (set) var profile: Profile?
+    private var task: URLSessionTask?
+}
+
+extension ProfileService {
+    
     public func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        
+        //Логика для предотвращения гонки
+        assert(Thread.isMainThread)
+        task?.cancel()
+        
+        //Формирование URLRequest на получение данных своего профиля
         guard let request = fetchProfileRequest(token) else { return }
-        let decoder = JSONDecoder()
-        let fulfillCompletion: (Result<Profile, Error>) -> Void = { result in
-            DispatchQueue.main.async {
-                completion(result)
-                return
+        
+        //создание URLSessionDataTask на получение данных своего профиля
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
+            guard let self = self else { return }
+            self.task = nil
+            switch result {
+            case .success(let profileResult):
+                self.profile = Profile(userName: profileResult.userName ?? "",
+                                       name: "\(profileResult.firstName ?? "") " + "\(profileResult.lastName ?? "")",
+                                       loginName: "@\(profileResult.userName ?? "")" ,
+                                       bio: profileResult.bio ?? "")
+                completion(.success(self.profile!))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
-       
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode
-            {
-                if 200 ..< 300 ~= statusCode,
-                   let profileResult = try? decoder.decode(ProfileResult.self, from: data) {
-                    let profile = Profile(userName: profileResult.userName ?? "", name: "\(profileResult.firstName ?? "") " + "\(profileResult.lastName ?? "")", loginName: "@\(profileResult.userName ?? "")" , bio: profileResult.bio ?? "")
-                    fulfillCompletion(.success(profile))
-                } else {
-                    fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
-                }
-            } else if let error = error {
-                fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
-            } else {
-                fulfillCompletion(.failure(NetworkError.urlSessionError))
-            }
-        }
-        task.resume()
+        self.task = task
+        task?.resume()
     }
     
     private func fetchProfileRequest(_ token: String) -> URLRequest? {

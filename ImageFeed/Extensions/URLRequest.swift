@@ -1,9 +1,7 @@
 import Foundation
 
 extension URLRequest {
-    func sessionTask(
-        for request: URLRequest,
-        completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionDataTask?
+    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionDataTask?
     {
         let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
@@ -12,7 +10,7 @@ extension URLRequest {
             }
         }
         
-        let task = OAuth2Service.shared.urlSession.dataTask(with: request, completionHandler: { data, response, error in
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
             if let data = data,
                let response = response,
                let statusCode = (response as? HTTPURLResponse)?.statusCode
@@ -28,7 +26,17 @@ extension URLRequest {
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
         })
-        task.resume()
+        
         return task
+    }
+    
+    static func makeHTTPRequest(path: String, httpMethod: String, baseURL: URL = SplashParam.defaultBaseURL) -> URLRequest? {
+        guard let url = URL(string: path, relativeTo: baseURL)
+        else {
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = httpMethod
+        return request
     }
 }

@@ -1,21 +1,35 @@
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService.shared
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setConstraints()
-        fetchProfile()
+        updateAvatar()
+        updateProfileDetails()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        
     }
     
     private let avatar: UIImageView = {
-        let profileImage = UIImage(named: "Avatar")
-        let avatar = UIImageView(image: profileImage)
-        avatar.translatesAutoresizingMaskIntoConstraints = false
-        return avatar
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private let nameLabel: UILabel = {
@@ -25,6 +39,7 @@ final class ProfileViewController: UIViewController {
         label.font = label.font.withSize(23)
         return label
     }()
+    
     
     private let logoutButton: UIButton = {
         let button = UIButton()
@@ -80,21 +95,22 @@ final class ProfileViewController: UIViewController {
         
     }
     
-    private func fetchProfile() {
-         guard let token = OAuth2TokenStorage().token else { return }
-
-         ProfileService().fetchProfile(token) { [weak self] result in
-             guard let self = self else { return }
-             switch result {
-             case .success(let profile):
-                 self.nameLabel.text = profile.name
-                 self.loginLabel.text = profile.loginName
-                 self.descriptionLabel.text = profile.bio
-             case .failure(let error):
-                 print(error)
-             }
-         }
-     }
+    private func updateProfileDetails() {
+        nameLabel.text = profileService.profile?.name
+        loginLabel.text = profileService.profile?.loginName
+        descriptionLabel.text = profileService.profile?.bio
+    }
+    
+    private func updateAvatar() {
+        view.backgroundColor = UIColor(named: "YP Black")
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 35, backgroundColor: .clear)
+        avatar.kf.indicatorType = .activity
+        avatar.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+    }
     
     @objc
     func logoutButtonTap() {
