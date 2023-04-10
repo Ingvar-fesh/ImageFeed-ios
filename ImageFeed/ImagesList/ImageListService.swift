@@ -43,20 +43,20 @@ struct Photo {
 
 final class ImageListService {
     
-    private var photos: [Photo] = []
+    var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private let perPage = "10"
     private var task: URLSessionTask?
 
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
-    func fetchPhotosNextPage(_ token: String) {
+    func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         task?.cancel()
         
         let page = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
-        guard let request = fetchImagesListRequest(token, page: String(page), perPage: perPage) else { return }
+        guard let request = fetchImagesListRequest(page: String(page), perPage: perPage) else { return }
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             DispatchQueue.main.async {
@@ -84,14 +84,16 @@ final class ImageListService {
         task?.resume()
     }
     
-    func fetchImagesListRequest(_ token: String, page: String, perPage: String) -> URLRequest? {
+    func fetchImagesListRequest(page: String, perPage: String) -> URLRequest? {
         guard let url = URL(string: "https://api.unsplash.com") else { return nil }
         
         var request = URLRequest.makeHTTPRequest(path: "/photos?page=\(page)&&per_page=\(perPage)",
                                                  httpMethod: "GET",
                                                  baseURL: url)
         
-        request?.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        if let token = OAuth2TokenStorage().token {
+            request?.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         
         return request
     }

@@ -36,8 +36,19 @@
 		F0CC033A29BB27A0002CB3AE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC033929BB27A0002CB3AE /* ProfileViewController.swift */; };
 		F0DF46A229DBC6F7001E7179 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DF46A129DBC6F7001E7179 /* ProfileImageService.swift */; };
 		F0E98F6229E400C200E719D3 /* ImageListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E98F6129E400C200E719D3 /* ImageListService.swift */; };
+		F0E98F7729E40D3C00E719D3 /* ImageFeedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E98F7629E40D3C00E719D3 /* ImageFeedTests.swift */; };
 		F0F326D429D97EC4003A3F95 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = F0F326D329D97EC4003A3F95 /* ProgressHUD */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F0E98F7829E40D3C00E719D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F02F34FA29B5F4430069B960 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F02F350129B5F4430069B960;
+			remoteInfo = ImageFeed;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		F00D33D929D5DEAA0058FACE /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
@@ -69,6 +80,8 @@
 		F0CC033929BB27A0002CB3AE /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		F0DF46A129DBC6F7001E7179 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		F0E98F6129E400C200E719D3 /* ImageListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListService.swift; sourceTree = "<group>"; };
+		F0E98F7429E40D3C00E719D3 /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0E98F7629E40D3C00E719D3 /* ImageFeedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFeedTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +92,13 @@
 				F0552F1A29DF1FF60015AB8D /* Kingfisher in Frameworks */,
 				F0F326D429D97EC4003A3F95 /* ProgressHUD in Frameworks */,
 				F0552F1D29DF29730015AB8D /* SwiftKeychainWrapper in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0E98F7129E40D3C00E719D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				F02F350429B5F4430069B960 /* ImageFeed */,
+				F0E98F7529E40D3C00E719D3 /* ImageFeedTests */,
 				F02F350329B5F4430069B960 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -114,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				F02F350229B5F4430069B960 /* ImageFeed.app */,
+				F0E98F7429E40D3C00E719D3 /* ImageFeedTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +230,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		F0E98F7529E40D3C00E719D3 /* ImageFeedTests */ = {
+			isa = PBXGroup;
+			children = (
+				F0E98F7629E40D3C00E719D3 /* ImageFeedTests.swift */,
+			);
+			path = ImageFeedTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -233,6 +263,24 @@
 			productReference = F02F350229B5F4430069B960 /* ImageFeed.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F0E98F7329E40D3C00E719D3 /* ImageFeedTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0E98F7A29E40D3C00E719D3 /* Build configuration list for PBXNativeTarget "ImageFeedTests" */;
+			buildPhases = (
+				F0E98F7029E40D3C00E719D3 /* Sources */,
+				F0E98F7129E40D3C00E719D3 /* Frameworks */,
+				F0E98F7229E40D3C00E719D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0E98F7929E40D3C00E719D3 /* PBXTargetDependency */,
+			);
+			name = ImageFeedTests;
+			productName = ImageFeedTests;
+			productReference = F0E98F7429E40D3C00E719D3 /* ImageFeedTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -245,6 +293,10 @@
 				TargetAttributes = {
 					F02F350129B5F4430069B960 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					F0E98F7329E40D3C00E719D3 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = F02F350129B5F4430069B960;
 					};
 				};
 			};
@@ -267,6 +319,7 @@
 			projectRoot = "";
 			targets = (
 				F02F350129B5F4430069B960 /* ImageFeed */,
+				F0E98F7329E40D3C00E719D3 /* ImageFeedTests */,
 			);
 		};
 /* End PBXProject section */
@@ -279,6 +332,13 @@
 				F069A25029B86CEF0007E997 /* Main.storyboard in Resources */,
 				F02F351229B5F4460069B960 /* LaunchScreen.storyboard in Resources */,
 				F02F350F29B5F4460069B960 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0E98F7229E40D3C00E719D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +376,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F0E98F7029E40D3C00E719D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0E98F7729E40D3C00E719D3 /* ImageFeedTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0E98F7929E40D3C00E719D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F02F350129B5F4430069B960 /* ImageFeed */;
+			targetProxy = F0E98F7829E40D3C00E719D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F02F351029B5F4460069B960 /* LaunchScreen.storyboard */ = {
@@ -508,6 +584,42 @@
 			};
 			name = Release;
 		};
+		F0E98F7B29E40D3C00E719D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FD3TPFL77C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.ingvar-fesh.ImageFeedTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageFeed.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ImageFeed";
+			};
+			name = Debug;
+		};
+		F0E98F7C29E40D3C00E719D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FD3TPFL77C;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.ingvar-fesh.ImageFeedTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageFeed.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ImageFeed";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -525,6 +637,15 @@
 			buildConfigurations = (
 				F02F351729B5F4460069B960 /* Debug */,
 				F02F351829B5F4460069B960 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0E98F7A29E40D3C00E719D3 /* Build configuration list for PBXNativeTarget "ImageFeedTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0E98F7B29E40D3C00E719D3 /* Debug */,
+				F0E98F7C29E40D3C00E719D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
