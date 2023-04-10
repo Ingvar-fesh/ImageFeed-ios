@@ -35,6 +35,7 @@
 		F0BEBAF529CD9BA200F65326 /* WebViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0BEBAF429CD9BA200F65326 /* WebViewControllerDelegate.swift */; };
 		F0CC033A29BB27A0002CB3AE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CC033929BB27A0002CB3AE /* ProfileViewController.swift */; };
 		F0DF46A229DBC6F7001E7179 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DF46A129DBC6F7001E7179 /* ProfileImageService.swift */; };
+		F0E98F6229E400C200E719D3 /* ImageListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E98F6129E400C200E719D3 /* ImageListService.swift */; };
 		F0F326D429D97EC4003A3F95 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = F0F326D329D97EC4003A3F95 /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		F0BEBAF429CD9BA200F65326 /* WebViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewControllerDelegate.swift; sourceTree = "<group>"; };
 		F0CC033929BB27A0002CB3AE /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		F0DF46A129DBC6F7001E7179 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
+		F0E98F6129E400C200E719D3 /* ImageListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 			children = (
 				F02F350929B5F4430069B960 /* ImagesListViewController.swift */,
 				F069A25229B86D410007E997 /* ImagesListCell.swift */,
+				F0E98F6129E400C200E719D3 /* ImageListService.swift */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				F0CC033A29BB27A0002CB3AE /* ProfileViewController.swift in Sources */,
 				F02F350629B5F4430069B960 /* AppDelegate.swift in Sources */,
 				F094B61729CCB47900A8BA68 /* AuthViewController.swift in Sources */,
+				F0E98F6229E400C200E719D3 /* ImageListService.swift in Sources */,
 				F0552F1529DF12080015AB8D /* NetworkError.swift in Sources */,
 				F094B61429CCA11F00A8BA68 /* Constants.swift in Sources */,
 				F051B26929DADE370076609D /* URLRequest.swift in Sources */,
