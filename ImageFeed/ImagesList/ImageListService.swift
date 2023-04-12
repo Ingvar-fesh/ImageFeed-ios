@@ -43,18 +43,20 @@ struct Photo {
 
 final class ImageListService {
     
-    private var photos: [Photo] = []
+    private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     private let perPage = "10"
     private var task: URLSessionTask?
 
+    static let shared = ImageListService()
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
-    func fetchPhotosNextPage(_ token: String) {
+    func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         task?.cancel()
         
         let page = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        guard let token = OAuth2TokenStorage().token else { return }
         
         guard let request = fetchImagesListRequest(token, page: String(page), perPage: perPage) else { return }
         
