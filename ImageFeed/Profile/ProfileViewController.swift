@@ -127,28 +127,25 @@ final class ProfileViewController: UIViewController {
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] action in
             guard let self = self else { return }
-            self.logout()
+            OAuth2TokenStorage().token = nil
+            
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                records.forEach { record in
+                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                }
+            }
+            
+            ImageListService.shared.clean()
+            ProfileService.shared.clean()
+            ProfileImageService.shared.clean()
+            
+            self.switchToSplashViewController()
         }))
         alertController.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
     
-    
-    private func logout() {
-        OAuth2TokenStorage().token = nil
-        ProfileViewController.clean()
-        switchToSplashViewController()
-    }
-    
-    
-    static func clean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
-    }
     
     private func switchToSplashViewController() {
         guard let window = UIApplication.shared.windows.first else {

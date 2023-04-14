@@ -60,8 +60,17 @@ final class ImageListService {
     private let perPage = "10"
     private var task: URLSessionTask?
     
+    private let dateFormatter = ISO8601DateFormatter()
+    
     func updatePhotos(_ photos: [Photo]) {
         self.photos = photos
+    }
+    
+    func clean() {
+        photos = []
+        lastLoadedPage = nil
+        task?.cancel()
+        task = nil
     }
 }
 
@@ -69,9 +78,13 @@ extension ImageListService {
     
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-        task?.cancel()
+        guard task == nil else { return }
         
-        let page = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        var page = 1
+        if let lastLoadedPage = lastLoadedPage {
+            page = lastLoadedPage + 1
+        }
+        
         guard let token = OAuth2TokenStorage().token else { return }
         
         guard let request = fetchImagesListRequest(token, page: String(page), perPage: perPage) else { return }
@@ -89,8 +102,8 @@ extension ImageListService {
                     NotificationCenter.default.post(name: ImageListService.didChangeNotification,
                                                     object: self,
                                                     userInfo: ["Images" : self.photos])
-                case .failure(_):
-                    break
+                case .failure(let error):
+                    assertionFailure("Ошибка получения изображений \(error)")
                 }
             }
         }
@@ -99,11 +112,7 @@ extension ImageListService {
     }
     
     private func convert(_ photoResult: PhotoResult) -> Photo {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         let date = dateFormatter.date(from:photoResult.createdAt ?? "")
-        
         return Photo.init(id: photoResult.id,
                           size: CGSize(width: photoResult.width ?? 0, height: photoResult.height ?? 0),
                           createdAt: date,
