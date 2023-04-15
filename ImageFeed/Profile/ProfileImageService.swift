@@ -17,21 +17,24 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private (set) var avatarURL: String?
     private var task: URLSessionTask?
+    
+    func clean() {
+        avatarURL = nil
+        task?.cancel()
+        task = nil
+    }
 }
 
 extension ProfileImageService {
     
     func fetchProfileImageURL(_ token: String, username: String?, completion: @escaping (Result<String?, Error>) -> Void) {
         
-        //Логика для предотвращения гонки
         assert(Thread.isMainThread)
-        task?.cancel()
+        guard task == nil else { return }
         
-        //Формирование URLRequest на получение публичных данных своего профиля
         guard let username = username else { return }
         guard let request = fetchProfileImageRequest(token, username: username) else { return }
         
-        //создание URLSessionDataTask на получение публичных данных своего профиля
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }

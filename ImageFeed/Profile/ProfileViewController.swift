@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
@@ -9,22 +10,6 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     
     override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setConstraints()
-        updateAvatar()
-        updateProfileDetails()
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.DidChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
-        
-    }
     
     private let avatar: UIImageView = {
         let imageView = UIImageView()
@@ -42,11 +27,13 @@ final class ProfileViewController: UIViewController {
     
     
     private let logoutButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Log out"), for: .normal)
+        let button = UIButton.systemButton(
+            with: UIImage(named: "Log out")!,
+            target: self,
+            action: #selector(Self.logoutButtonTap)
+        )
         button.tintColor = UIColor(named: "YP Red")
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(ProfileViewController.self, action: #selector(logoutButtonTap), for: .touchUpInside)
         return button
     }()
     
@@ -65,6 +52,23 @@ final class ProfileViewController: UIViewController {
         label.font = label.font.withSize(13)
         return label
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setConstraints()
+        updateAvatar()
+        updateProfileDetails()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        
+    }
+    
     
     private func setConstraints() {
         view.addSubview(avatar)
@@ -114,6 +118,39 @@ final class ProfileViewController: UIViewController {
     
     @objc
     func logoutButtonTap() {
-        print("New tep")
+        showAlert()
+    }
+    
+    private func showAlert() {
+        let alertController = UIAlertController(title: "Пока!",
+                                                message: "Уверены, что хотите выйти?",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] action in
+            guard let self = self else { return }
+            OAuth2TokenStorage().token = nil
+            
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                records.forEach { record in
+                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                }
+            }
+            
+            ImageListService.shared.clean()
+            ProfileService.shared.clean()
+            ProfileImageService.shared.clean()
+            
+            self.switchToSplashViewController()
+        }))
+        alertController.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    private func switchToSplashViewController() {
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        window.rootViewController = SplashViewController()
     }
 }

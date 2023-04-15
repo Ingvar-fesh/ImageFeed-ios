@@ -35,6 +35,7 @@ final class SplashViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        view.backgroundColor = UIColor(named: "YP Black")
         addSubviews()
         setupLayout()
     }

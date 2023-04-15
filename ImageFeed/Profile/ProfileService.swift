@@ -26,20 +26,23 @@ final class ProfileService {
     static let shared = ProfileService()
     private (set) var profile: Profile?
     private var task: URLSessionTask?
+    
+    func clean() {
+        profile = nil
+        task?.cancel()
+        task = nil
+    }
 }
 
 extension ProfileService {
     
     public func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
-        //Логика для предотвращения гонки
         assert(Thread.isMainThread)
-        task?.cancel()
+        guard task == nil else { return }
         
-        //Формирование URLRequest на получение данных своего профиля
         guard let request = fetchProfileRequest(token) else { return }
         
-        //создание URLSessionDataTask на получение данных своего профиля
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             self.task = nil
