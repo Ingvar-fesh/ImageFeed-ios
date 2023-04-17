@@ -3,7 +3,13 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func switchToSplashViewController()
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    var presenter: ProfilePresenterProtocol?
     
     private let profileService = ProfileService.shared
     
@@ -56,6 +62,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setConstraints()
+        view.backgroundColor = UIColor(named: "YP Black")
         updateAvatar()
         updateProfileDetails()
         
@@ -99,21 +106,23 @@ final class ProfileViewController: UIViewController {
         
     }
     
-    private func updateProfileDetails() {
-        nameLabel.text = profileService.profile?.name
-        loginLabel.text = profileService.profile?.loginName
-        descriptionLabel.text = profileService.profile?.bio
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
     }
     
-    private func updateAvatar() {
-        view.backgroundColor = UIColor(named: "YP Black")
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+    public func updateProfileDetails() {
+        var profileDetails: [String]?
+        profileDetails = presenter?.updateProfileDetails()
+        nameLabel.text = profileDetails?[0]
+        loginLabel.text = profileDetails?[1]
+        descriptionLabel.text = profileDetails?[2]
+    }
+    
+    public func updateAvatar() {
         let processor = RoundCornerImageProcessor(cornerRadius: 35, backgroundColor: .clear)
         avatar.kf.indicatorType = .activity
-        avatar.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        avatar.kf.setImage(with: presenter?.avatarURL(), placeholder: UIImage(named: "placeholder"), options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
     }
     
     @objc
@@ -125,29 +134,21 @@ final class ProfileViewController: UIViewController {
         let alertController = UIAlertController(title: "Пока!",
                                                 message: "Уверены, что хотите выйти?",
                                                 preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] action in
+        
+        let action = UIAlertAction(title: "Да", style: .default, handler: { [weak self] action in
             guard let self = self else { return }
-            OAuth2TokenStorage().token = nil
-            
-            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-                records.forEach { record in
-                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-                }
-            }
-            
-            ImageListService.shared.clean()
-            ProfileService.shared.clean()
-            ProfileImageService.shared.clean()
-            
-            self.switchToSplashViewController()
-        }))
+            self.presenter?.logout()
+        })
+        
+        alertController.addAction(action)
+        action.accessibilityIdentifier = "Yes action"
         alertController.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        alertController.view.accessibilityIdentifier = "Bye bye!"
         present(alertController, animated: true, completion: nil)
     }
     
     
-    private func switchToSplashViewController() {
+    func switchToSplashViewController() {
         guard let window = UIApplication.shared.windows.first else {
             fatalError("Invalid Configuration")
         }
