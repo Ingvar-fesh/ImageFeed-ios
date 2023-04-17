@@ -179,7 +179,6 @@
         <!--Single Image View Controller-->
         <scene sceneID="Tco-zv-yo8">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zfU-oa-eu3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController modalPresentationStyle="fullScreen" id="puI-bZ-R2o" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mj9-RW-gN8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -244,13 +243,14 @@
                         <outlet property="scrollView" destination="uwB-td-kLG" id="9GJ-9Z-Mq0"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zfU-oa-eu3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1896" y="-419"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="blj-tW-Sls">
             <objects>
-                <viewController id="jYE-Qe-dmt" userLabel="Web View Controller" customClass="WebViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" id="jYE-Qe-dmt" userLabel="Web View Controller" customClass="WebViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="BFL-4A-vOa">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
