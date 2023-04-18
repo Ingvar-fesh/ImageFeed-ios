@@ -28,6 +28,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = label.font.withSize(23)
+        label.accessibilityIdentifier = "nameUser"
         return label
     }()
     
@@ -40,6 +41,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         )
         button.tintColor = UIColor(named: "YP Red")
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityIdentifier = "logout"
         return button
     }()
     
@@ -56,6 +58,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .gray
         label.font = label.font.withSize(13)
+        label.accessibilityIdentifier = "userName"
         return label
     }()
     
@@ -143,7 +146,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
         alertController.addAction(action)
         action.accessibilityIdentifier = "Yes action"
         alertController.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
-        alertController.view.accessibilityIdentifier = "Bye bye!"
+        alertController.view.accessibilityIdentifier = "Bye"
         present(alertController, animated: true, completion: nil)
     }
     

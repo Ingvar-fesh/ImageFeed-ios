@@ -10,20 +10,36 @@ protocol WebViewControllerProtocol: AnyObject {
 }
 
 final class WebViewController: UIViewController & WebViewControllerProtocol {
-    
-    @IBOutlet private weak var webView: WKWebView!
-    @IBOutlet private weak var progressView: UIProgressView!
+    let webView = WKWebView()
+    let progressView = UIProgressView()
     
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     weak var delegate: WebViewControllerDelegate?
     var presenter: WebViewPresenterProtocol?
     
+    private lazy var backButton: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage(named: "Go_out_button_dark")!,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        button.tintColor = UIColor(named: "YP Black")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setupLayout()
         
+        progressView.progressTintColor = UIColor(named: "YP Black")
         webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.accessibilityIdentifier = "UnsplashWebView"
+        progressView.translatesAutoresizingMaskIntoConstraints = false
         
         presenter?.viewDidLoad()
         presenter?.didUpdateProgressValue(0)
@@ -68,7 +84,33 @@ final class WebViewController: UIViewController & WebViewControllerProtocol {
     
     func load(request: URLRequest) {
         webView.load(request)
-    } 
+    }
+    
+    
+    private func addSubviews() {
+        view.addSubview(webView)
+        view.addSubview(backButton)
+        view.addSubview(progressView)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            backButton.heightAnchor.constraint(equalToConstant: 50),
+            backButton.widthAnchor.constraint(equalToConstant: 51),
+            
+            progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            progressView.heightAnchor.constraint(equalToConstant: 2),
+     ])
+    }
 }
 
 
