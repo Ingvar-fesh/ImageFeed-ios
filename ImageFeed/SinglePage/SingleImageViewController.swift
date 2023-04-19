@@ -11,11 +11,15 @@ final class SingleImageViewController: UIViewController {
         return imageView
     }()
     
-    lazy var scrollView: UIScrollView = {
-       let scrollView = UIScrollView()
+    lazy var scrollView: ImageScrollView = {
+        let scrollView = ImageScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.bouncesZoom = true
         scrollView.backgroundColor = .white
-        scrollView.frame = view.bounds
-        scrollView.contentSize = contentSize
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
         return scrollView
     }()
     
@@ -56,12 +60,16 @@ final class SingleImageViewController: UIViewController {
 
     @objc
     private func didTapBackButtonSingleImage() {
-     dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     @objc
     private func didTapShareButton() {
-        
+        guard let image = scrollView.image else {
+            return
+        }
+        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activityViewController, animated: true)
     }
     
     private func addSubviews() {

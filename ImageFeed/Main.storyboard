@@ -121,7 +121,7 @@
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I9r-bI-YNd">
                                 <rect key="frame" x="16" y="682" width="382" height="48"/>
-                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
+                                <accessibility key="accessibilityConfiguration" identifier=" Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="Wrj-NT-g1m"/>
                                 </constraints>

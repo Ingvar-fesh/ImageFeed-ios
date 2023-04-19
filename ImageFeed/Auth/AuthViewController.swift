@@ -9,7 +9,7 @@ final class AuthViewController: UIViewController {
     weak var delegate: AuthViewControllerDelegate?
     
 
-    @IBAction func webViewShow(_ sender: Any) {
+    @IBAction private func webViewShow(_ sender: Any) {
         let webViewController = WebViewController()
         webViewController.modalPresentationStyle = .fullScreen
         let authHelper = AuthHelper()

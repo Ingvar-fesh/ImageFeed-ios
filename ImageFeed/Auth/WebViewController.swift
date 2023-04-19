@@ -10,8 +10,8 @@ protocol WebViewControllerProtocol: AnyObject {
 }
 
 final class WebViewController: UIViewController & WebViewControllerProtocol {
-    let webView = WKWebView()
-    let progressView = UIProgressView()
+    private let webView = WKWebView()
+    private let progressView = UIProgressView()
     
     private var estimatedProgressObservation: NSKeyValueObservation?
     

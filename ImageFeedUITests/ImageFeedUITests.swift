@@ -40,8 +40,8 @@ final class ImageFeedUITests: XCTestCase {
         let tablesQuery = app.tables
             
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(cell.waitForExistence(timeout: 5))
         cell.swipeUp()
-        
         sleep(2)
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
@@ -57,6 +57,7 @@ final class ImageFeedUITests: XCTestCase {
         sleep(2)
         
         let image = app.scrollViews.images.element(boundBy: 0)
+        XCTAssertTrue(image.waitForExistence(timeout: 5))
         // Zoom in
         image.pinch(withScale: 3, velocity: 1) // zoom in
         // Zoom out
@@ -75,7 +76,11 @@ final class ImageFeedUITests: XCTestCase {
         
         app.buttons["logout"].tap()
         
-        app.alerts["Bye"].scrollViews.otherElements.buttons["Yes"].tap()
+        app.alerts["Bye"].scrollViews.otherElements.buttons["Yes action"].tap()
+        sleep(2)
+        
+        let authButton = app.buttons["Authenticate"]
+        XCTAssertTrue(authButton.waitForExistence(timeout: 5))
     }
 }
 
