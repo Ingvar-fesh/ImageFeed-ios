@@ -38,9 +38,13 @@ final class SingleImageViewController: UIViewController {
         return button
     }()
     
-    private lazy var shareButton: UIButton = {
+    @objc private lazy var shareButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Share_button"), for: .normal)
+        button.addTarget(
+            self,
+            action:  #selector(Self.didTapShareButton),
+            for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -65,11 +69,12 @@ final class SingleImageViewController: UIViewController {
     
     @objc
     private func didTapShareButton() {
-        guard let image = scrollView.image else {
-            return
-        }
-        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(activityViewController, animated: true)
+        guard let image = imageView.image else { return }
+        let share = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
+        present(share, animated: true, completion: nil)
     }
     
     private func addSubviews() {
