@@ -33,6 +33,7 @@ final class SingleImageViewController: UIViewController {
             target: self,
             action: #selector(Self.didTapBackButtonSingleImage)
         )
+        button.accessibilityIdentifier = "Go_out_button"
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
