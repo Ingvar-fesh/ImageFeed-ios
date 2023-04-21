@@ -11,11 +11,15 @@ final class SingleImageViewController: UIViewController {
         return imageView
     }()
     
-    lazy var scrollView: UIScrollView = {
-       let scrollView = UIScrollView()
+    lazy var scrollView: ImageScrollView = {
+        let scrollView = ImageScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.bouncesZoom = true
         scrollView.backgroundColor = .white
-        scrollView.frame = view.bounds
-        scrollView.contentSize = contentSize
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
         return scrollView
     }()
     
@@ -29,14 +33,19 @@ final class SingleImageViewController: UIViewController {
             target: self,
             action: #selector(Self.didTapBackButtonSingleImage)
         )
+        button.accessibilityIdentifier = "Go_out_button"
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    private lazy var shareButton: UIButton = {
+    @objc private lazy var shareButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Share_button"), for: .normal)
+        button.addTarget(
+            self,
+            action:  #selector(Self.didTapShareButton),
+            for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -56,12 +65,17 @@ final class SingleImageViewController: UIViewController {
 
     @objc
     private func didTapBackButtonSingleImage() {
-     dismiss(animated: true)
+        dismiss(animated: true)
     }
     
     @objc
     private func didTapShareButton() {
-        
+        guard let image = imageView.image else { return }
+        let share = UIActivityViewController(
+            activityItems: [image],
+            applicationActivities: nil
+        )
+        present(share, animated: true, completion: nil)
     }
     
     private func addSubviews() {

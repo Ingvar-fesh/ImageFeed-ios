@@ -1,42 +1,55 @@
 import UIKit
 import WebKit
 
-final class WebViewController: UIViewController {
-    
 
-    @IBOutlet private weak var webView: WKWebView!
-    @IBOutlet private weak var progressView: UIProgressView!
+protocol WebViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? { get set }
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressHidden(_ isHidden: Bool)
+}
+
+final class WebViewController: UIViewController & WebViewControllerProtocol {
+    private let webView = WKWebView()
+    private let progressView = UIProgressView()
     
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     weak var delegate: WebViewControllerDelegate?
+    var presenter: WebViewPresenterProtocol?
+    
+    private lazy var backButton: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage(named: "Go_out_button_dark")!,
+            target: self,
+            action: #selector(didTapBackButton)
+        )
+        button.tintColor = UIColor(named: "YP Black")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setupLayout()
         
+        progressView.progressTintColor = UIColor(named: "YP Black")
         webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.accessibilityIdentifier = "UnsplashWebView"
+        progressView.translatesAutoresizingMaskIntoConstraints = false
         
-        var urlComponents = URLComponents(string: SplashParam.unsplashAuthorizeURLString)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "client_id", value: SplashParam.accessKey),
-            URLQueryItem(name: "redirect_uri", value: SplashParam.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: SplashParam.accessScope)
-        ]
-        
-        if let url = urlComponents?.url {
-            let request = URLRequest(url: url)
-            webView.load(request)
-            updateProgress()
-        }
+        presenter?.viewDidLoad()
+        presenter?.didUpdateProgressValue(0)
         
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                 self.updateProgress()
+                 self.presenter?.didUpdateProgressValue(self.webView.estimatedProgress)
              })
     }
     
@@ -47,7 +60,7 @@ final class WebViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateProgress()
+        presenter?.didUpdateProgressValue(0)
     }
 
     
@@ -59,6 +72,44 @@ final class WebViewController: UIViewController {
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    }
+    
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
+    }
+
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
+    }
+    
+    func load(request: URLRequest) {
+        webView.load(request)
+    }
+    
+    
+    private func addSubviews() {
+        view.addSubview(webView)
+        view.addSubview(backButton)
+        view.addSubview(progressView)
+    }
+    
+    private func setupLayout() {
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            webView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            backButton.heightAnchor.constraint(equalToConstant: 50),
+            backButton.widthAnchor.constraint(equalToConstant: 51),
+            
+            progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            progressView.heightAnchor.constraint(equalToConstant: 2),
+     ])
     }
 }
 
@@ -76,16 +127,10 @@ extension WebViewController: WKNavigationDelegate {
     }
     
     private func fetchCode(navigationAction: WKNavigationAction) -> String? {
-        if
-            let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            return codeItem.value
-        } else {
-            return nil
+        if let url = navigationAction.request.url {
+            return presenter?.fetchCode(from: url)
         }
+        return nil
     }
 }
+

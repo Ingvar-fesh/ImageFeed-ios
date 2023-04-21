@@ -1,17 +1,17 @@
 import UIKit
 import Kingfisher
 
-final class ImagesListViewController: UIViewController {
+protocol ImageListViewControllerProtocol {
+    var presenter: ImageListPresenterProtocol? { get set }
+}
+
+final class ImagesListViewController: UIViewController & ImageListViewControllerProtocol {
     
     @IBOutlet private weak var tableView: UITableView!
     
+    var presenter: ImageListPresenterProtocol?
+    
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
     
     private var photos: [Photo] = []
     private let imagesListService = ImageListService.shared
@@ -29,6 +29,11 @@ final class ImagesListViewController: UIViewController {
             self.updateTableViewAnimated()
         }
         imagesListService.fetchPhotosNextPage()
+    }
+    
+    func configure(_ presenter: ImageListPresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
     }
     
     private func updateTableViewAnimated() {
@@ -58,7 +63,7 @@ final class ImagesListViewController: UIViewController {
             }
             
             if let date = imagesListService.photos[indexPath.row].createdAt {
-                cell.dateLabel.text = dateFormatter.string(from: date)
+                cell.dateLabel.text = presenter?.dateString(date)
             } else {
                 cell.dateLabel.text = ""
             }
@@ -100,7 +105,9 @@ extension ImagesListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+        if let visibleIndexPaths = tableView.indexPathsForVisibleRows,
+        visibleIndexPaths.contains(indexPath),
+        indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             imagesListService.fetchPhotosNextPage()
         }
     }
